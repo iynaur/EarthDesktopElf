@@ -10,6 +10,7 @@
 # include <GL/glu.h>
 #endif
 #include "earth.h"
+#include "common.h"
 
 #include <QDebug>
 
@@ -19,13 +20,14 @@ Earth::Earth(QWidget *parent, bool fs)
     , speed(2)
     , isShowSlider(true)
 {
+    setIdentity(cloud_matrix_);
     setupWindowStyle();
     setupTrayIcon();
     setupSpeedSlider();
     QTimer* timer = new QTimer(this);
     timer->setInterval(30);
     connect(timer, &QTimer::timeout, this, static_cast<void(Earth::*)()>(&Earth::update));
-    timer->start();
+    //timer->start();
 }
 
 void Earth::initializeGL()
@@ -85,6 +87,78 @@ void Earth::closeEvent(QCloseEvent *)
     qApp->quit();
 }
 
+void Earth::mousePressEvent(QMouseEvent *event)
+{
+    x_ = event->x();
+    y_ = event->y();
+
+    trackball_.start(x_, y_);
+}
+
+void Earth::mouseMoveEvent(QMouseEvent *event)
+{
+    int x = event->x();
+    int y = event->y();
+    auto modifiers = event -> modifiers();
+    auto buttons = event -> buttons();
+    float transform[MATRIX_SIZE];
+
+    int dx = (x - x_);
+    int dy = (y - y_);
+    if (dx == 0 && dy == 0)
+      return;
+    trackball_.update(x, y);
+    if (modifiers & CTRL)
+      getTranslateMatrix(dx, dy, transform);
+    else if (modifiers & ALT)
+      getZTranslateMatrix(dy, transform);
+    else if (modifiers & SHFT)
+      getScaleMatrix(dy, transform);
+    else
+      trackball_.getRotationMatrix(transform);
+
+    ::multMatrix(cloud_matrix_, transform, cloud_matrix_);
+//    glMultMatrixf(cloud_matrix_);
+    update();
+
+    x_ = x;
+    y_ = y;
+}
+
+const float scale_factor_ = 1.14;
+const float translate_factor_ = 0.001f;
+
+void
+Earth::getTranslateMatrix (int dx, int dy, float* matrix)
+{
+  setIdentity(matrix);
+  float scale = 1.0f / 1;
+  matrix[12] = float(dx) * translate_factor_ * scale;
+  matrix[13] = float(-dy) * translate_factor_ * scale;
+}
+
+void
+Earth::getZTranslateMatrix (int dy, float* matrix)
+{
+  setIdentity(matrix);
+  matrix[14] = float(dy) * translate_factor_ / 1;
+}
+
+void
+Earth::getScaleMatrix (int dy, float* matrix)
+{
+  setIdentity(matrix);
+  float scale = dy > 0 ? scale_factor_ : 1.0 / scale_factor_;
+  for (unsigned int i = 0; i < MATRIX_SIZE-1; i+=MATRIX_SIZE_DIM+1)
+    matrix[i] = scale;
+}
+
+
+void Earth::mouseReleaseEvent(QMouseEvent *event)
+{
+
+}
+
 void Earth::drawSphere()
 {
     glLoadIdentity();
@@ -98,15 +172,16 @@ void Earth::drawSphere()
     gluQuadricTexture(qobj, GL_TRUE);
 
     glTranslated(0.0, 0.0, -6.0);
-    glRotated(-90, 1.0, 0.0, 0.0);
-    glRotated(rotatedSpeed, 0.0, 0.0, 1.0);
+    //glRotated(-90, 1.0, 0.0, 0.0);
+    //glRotated(rotatedSpeed, 0.0, 0.0, 1.0);
+    glMultMatrixf(cloud_matrix_);
     glColor3f(1.0, 1.0, 1.0);
 
     gluSphere(qobj, 1.6, 60, 60);
 
     glDisable(GL_TEXTURE_2D);
 
-    rotatedSpeed += speed/10;
+    //rotatedSpeed += speed/10;
 }
 
 void Earth::loadGLTextures()

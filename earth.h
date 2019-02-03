@@ -6,6 +6,8 @@
 #include <QOpenGLFunctions>
 #include <QSystemTrayIcon>
 
+#include "trackball.h"
+
 QT_BEGIN_NAMESPACE
 class QMenu;
 class QAction;
@@ -19,6 +21,9 @@ class Earth : public QOpenGLWidget, protected QOpenGLFunctions
 public:
     explicit Earth(QWidget *parent = 0, bool fs = false);
 
+    void getTranslateMatrix(int dx, int dy, float *matrix);
+    void getZTranslateMatrix(int dy, float *matrix);
+    void getScaleMatrix(int dy, float *matrix);
 protected:
     void initializeGL() Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;
@@ -26,6 +31,18 @@ protected:
     void keyPressEvent(QKeyEvent *) Q_DECL_OVERRIDE;
 
     void closeEvent(QCloseEvent *) Q_DECL_OVERRIDE;
+
+    /// mouse press control
+    void
+    mousePressEvent (QMouseEvent *event) override;
+
+    /// mouse move control
+    void
+    mouseMoveEvent (QMouseEvent *event) override;
+
+    /// mouse release control
+    void
+    mouseReleaseEvent (QMouseEvent *event) override;
 
 private:
     void drawSphere();
@@ -59,6 +76,13 @@ private:
 
     QPoint oldPos;
     QSlider *speedSlider;
+
+    /// the trackball associated with this transform
+    TrackBall trackball_;
+
+    /// last recorded mouse positions
+    int x_, y_;
+    float cloud_matrix_[MATRIX_SIZE];
 };
 
 #endif // SOLARSYSTEM_H
