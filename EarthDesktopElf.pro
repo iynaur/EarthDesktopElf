@@ -3,11 +3,9 @@ QT += opengl
 
 RC_FILE = ./resources/earth.rc
 
-LIBS += -lwinmm \
-        -lopengl32 \
-        -lglu32 \
-        -lglut32 \
-        -lgdi32
+LIBS += -lGL  \
+        -lGLU \
+        -lGLEW
 
 TEMPLATE = app
 

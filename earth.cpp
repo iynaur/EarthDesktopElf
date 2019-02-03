@@ -1,6 +1,14 @@
 #include <QtWidgets>
 #include <QtOpenGL>
-#include <QtOpenGL/glut>
+//#include <QtOpenGL/glut>
+#include <qgl.h>
+
+
+#ifdef OPENGL_IS_A_FRAMEWORK
+# include <OpenGL/glu.h>
+#else
+# include <GL/glu.h>
+#endif
 #include "earth.h"
 
 #include <QDebug>
@@ -9,7 +17,7 @@ Earth::Earth(QWidget *parent, bool fs)
     : QOpenGLWidget(parent)
     , fullscene(fs)
     , speed(2)
-    , isShowSlider(false)
+    , isShowSlider(true)
 {
     setupWindowStyle();
     setupTrayIcon();
@@ -94,7 +102,7 @@ void Earth::drawSphere()
 
     glDisable(GL_TEXTURE_2D);
 
-    rotatedSpeed += speed;
+    rotatedSpeed += speed/10;
 }
 
 void Earth::loadGLTextures()
@@ -173,25 +181,25 @@ void Earth::setupSpeedSlider()
 
     speedSlider->setParent(qApp->desktop());
     speedSlider->setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-    speedSlider->setGeometry(trayIcon->geometry().x() - 50
-                             , qApp->desktop()->availableGeometry().height() - 20
+    speedSlider->setGeometry(50
+                             ,20
                              , 100, 20);
 
     speedSlider->installEventFilter(this);
-    speedSlider->hide();
+    speedSlider->show();
 
     connect(speedSlider, SIGNAL(valueChanged(int)), this, SLOT(setSpeed(int)));
 }
 
 void Earth::trayActivated(QSystemTrayIcon::ActivationReason reason)
 {
-    if(reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::DoubleClick) {
+    if(1) {
         isShowSlider = !isShowSlider;
         if (isShowSlider) {
             speedSlider->show();
             speedSlider->activateWindow();
         } else {
-            speedSlider->hide();
+            //speedSlider->hide();
         }
     }
 }
@@ -204,7 +212,7 @@ void Earth::setSpeed(int value)
 bool Earth::eventFilter(QObject *watched, QEvent *event)
 {
     if ((watched == speedSlider && event->type() == QEvent::FocusOut)) {
-        speedSlider->hide();
+        //speedSlider->hide();
     }
 
     return QWidget::eventFilter(watched, event);
