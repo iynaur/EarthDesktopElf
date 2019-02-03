@@ -22,6 +22,10 @@ Earth::Earth(QWidget *parent, bool fs)
     setupWindowStyle();
     setupTrayIcon();
     setupSpeedSlider();
+    QTimer* timer = new QTimer(this);
+    timer->setInterval(30);
+    connect(timer, &QTimer::timeout, this, static_cast<void(Earth::*)()>(&Earth::update));
+    timer->start();
 }
 
 void Earth::initializeGL()
@@ -43,7 +47,7 @@ void Earth::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     drawSphere();
-    update();
+    //update();
 }
 
 void Earth::resizeGL(int width, int height)
@@ -120,15 +124,15 @@ void Earth::loadGLTextures()
 
 void Earth::setupWindowStyle()
 {
-    setWindowFlags(windowFlags()
-                   |Qt::FramelessWindowHint
-                   |Qt::X11BypassWindowManagerHint
-                   |Qt::WindowStaysOnTopHint
-                   |Qt::Tool);
-    setAttribute(Qt::WA_TranslucentBackground);
-    setWindowState(Qt::WindowNoState | Qt::WindowFullScreen);
-    setFocusPolicy(Qt::NoFocus);
-    setWindowOpacity(1.0);
+//    setWindowFlags(windowFlags()
+//                   |Qt::FramelessWindowHint
+//                   |Qt::X11BypassWindowManagerHint
+//                   |Qt::WindowStaysOnTopHint
+//                   |Qt::Tool);
+//    setAttribute(Qt::WA_TranslucentBackground);
+//    setWindowState(Qt::WindowNoState | Qt::WindowFullScreen);
+//    setFocusPolicy(Qt::NoFocus);
+//    setWindowOpacity(1.0);
 
     setWindowIcon(QIcon(":/resources/earth.ico"));
     setGeometry(qApp->desktop()->width() / 8 * 7, qApp->desktop()->height() / 12
