@@ -5,7 +5,8 @@ RC_FILE = ./resources/earth.rc
 
 LIBS += -lGL  \
         -lGLU \
-        -lGLEW
+        -lGLEW \
+        -lglut
 
 TEMPLATE = app
 
