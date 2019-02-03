@@ -3,5 +3,6 @@
         <file>resources/earth.jpg</file>
         <file>resources/earth.ico</file>
         <file>resources/earth.rc</file>
+        <file>resources/earth.png</file>
     </qresource>
 </RCC>
