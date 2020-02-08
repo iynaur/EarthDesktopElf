@@ -41,7 +41,7 @@
 #include <algorithm>
 #include <limits>
 #include "common.h"
-#include <trackball.h>
+#include "trackball.h"
 
 TrackBall::TrackBall() : quat_(1.0f), origin_x_(0), origin_y_(0), origin_z_(0)
 {

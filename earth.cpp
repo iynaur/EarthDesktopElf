@@ -1,7 +1,7 @@
 #include <QtWidgets>
-#include <QtOpenGL>
+#include <QtOpenGL/QtOpenGL>
 //#include <QtOpenGL/glut>
-#include <qgl.h>
+#include <QtOpenGL/qgl.h>
 
 
 #ifdef OPENGL_IS_A_FRAMEWORK

@@ -39,9 +39,9 @@
 /// @author Yue Li and Matthew Hielsberg
 ///
 
-#include <common.h>
-#include <localTypes.h>
-
+#include "common.h"
+#include "localTypes.h"
+#include <algorithm>
 void
 setIdentity(float* matrix)
 {

@@ -1,0 +1,7 @@
+
+.vs/*
+.qmake.stash
+out/*
+Debug/*
+CMakeLists.txt.user
+*.user

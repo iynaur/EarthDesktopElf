@@ -40,10 +40,6 @@
 #pragma once
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
-#include <pcl/point_types.h>
-#include <pcl/point_cloud.h>
 
 // Forward declaration for commonly used objects
 class Command;
@@ -52,43 +48,7 @@ class Selection;
 class CopyBuffer;
 class Cloud;
 
-// Some helpful typedef's for commonly used objects
 
-/// The type for the 3D points in the point cloud.
-typedef pcl::PointXYZRGBA Point3D;
-
-/// The type used as internal representation of a cloud object.
-typedef pcl::PointCloud<Point3D> Cloud3D;
-
-/// The type for the 3D point vector in the point cloud.
-typedef pcl::PointCloud<Point3D>::VectorType Point3DVector;
-
-/// The type for boost shared pointer pointing to a PCL cloud object.
-typedef Cloud3D::Ptr PclCloudPtr;
-
-/// The type for boost shared pointer pointing to a cloud object
-typedef boost::shared_ptr<Cloud> CloudPtr;
-
-/// The type for boost shared pointer pointing to a constant cloud
-/// object
-typedef boost::shared_ptr<const Cloud> ConstCloudPtr;
-
-/// The type for boost shared pointer pointing to a selection buffer
-typedef boost::shared_ptr<Selection> SelectionPtr;
-
-/// The type for boost shared pointer pointing to a constant selection
-/// buffer
-typedef boost::shared_ptr<const Selection> ConstSelectionPtr;
-
-/// The type for boost shared pointer pointing to a copy buffer
-typedef boost::shared_ptr<CopyBuffer> CopyBufferPtr;
-
-/// The type for boost shared pointer pointing to a constant copy
-/// buffer
-typedef boost::shared_ptr<const CopyBuffer> ConstCopyBufferPtr;
-
-/// The type for boost shared pointer pointing to a command object
-typedef boost::shared_ptr<Command> CommandPtr;
 
 /// The type used for vectors holding the indices of points in a cloud
 typedef std::vector<unsigned int> IndexVector;
@@ -96,10 +56,6 @@ typedef std::vector<unsigned int> IndexVector;
 /// The type used for vectors holding the constant indices of points in
 /// a cloud
 typedef std::vector<const int> ConstIndexVector;
-
-/// The type for boost shared pointer pointing to a command queue
-/// object
-typedef boost::shared_ptr<CommandQueue> CommandQueuePtr;
 
 /// The type for bit masks used for recognizing key pressed by user.
 typedef unsigned int BitMask;
