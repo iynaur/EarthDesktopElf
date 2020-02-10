@@ -187,7 +187,7 @@ void Earth::drawSphere()
 void Earth::loadGLTextures()
 {
     QImage *image = new QImage;
-    image->load(":/resources/earth.bmp");
+    image->load("resources/16k.png");
     QImage tex = QGLWidget::convertToGLFormat(*image);
     glGenTextures(1, &texture[0]);
     glBindTexture(GL_TEXTURE_2D, texture[0]);
